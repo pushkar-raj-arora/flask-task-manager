@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Office Task Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('{{ url_for("static", filename="image/office3.jpeg") }}') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .container {
+            background-color: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin-top: 50px;
+        }
+        h1 {
+            color: #495057;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        h1::after {
+            content: '';
+            display: block;
+            width: 385px;
+            height: 3px;
+            background: linear-gradient(to right, #0d3359, #0d6efd);;
+            margin: 10px auto 0;
+            border-radius: 5px;
+        }
+        .task-card {
+            transition: 0.2s;
+        }
+        .task-card:hover {
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        .strike {
+            text-decoration: line-through;
+            color: gray;
+        }
+        .btn {
+            min-width: 30px;
+        }
+    
+    .btn-custom {
+        border-radius: 25px;
+        padding: 2px 6px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-custom:hover {
+        transform: scale(1.08);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .btn-success {
+        background: linear-gradient(45deg, #28a745, #5cd65c);
+        border: none;
+    }
+
+    .btn-warning {
+        background: linear-gradient(45deg, #ffc107, #ffdb4d);
+        border: none;
+    }
+
+    .btn-danger {
+        background: linear-gradient(45deg, #dc3545, #ff6b6b);
+        border: none;
+    }
+    .app-title {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 800;
+    color: #343a40;
+    letter-spacing: 1px;
+    margin: 9px;
+}
+
+.app-title span {
+    color: #0d6efd;  /* highlight color */
+}
+
+/* underline effect */
+    .app-title::after {
+        content: '';
+        display: block;
+        width: 260px;
+        height: 3px;
+        background: linear-gradient(to right, #0d6efd, #10428c);
+        margin: 6px auto 0;
+        border-radius: 5px;
+    }
+
+    /* tagline */
+        .tagline {
+        text-align: center;
+        color: #868e96;
+        font-size: 12px;
+        margin-top: 0;
+        margin-bottom: 29px;
+        letter-spacing: 0.5px;
+        opacity: 0.8;
+        
+    }
+    </style>
+</head>
+<body>
+
+<div class="container py-4">
+    <h1 class="app-title">
+    Task<span>Manager</span>
+    </h1>
+    <p class="tagline">(Organize your work efficiently)</p>
+
+    <form method="POST" class="input-group mb-4">
+        <input type="text" name="task" class="form-control" placeholder="Add a new task" required>
+        <button type="submit" class="btn btn-primary">Add Task</button>
+    </form>
+
+    <div class="row g-3">
+        {% for task in tasks %}
+        <div class="col-md-6">
+            <div class="card task-card {% if task['done'] %}bg-light border-success{% endif %}">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <span class="{% if task['done'] %}strike{% endif %}">{{ task['task'] }}</span>
+                    <div>
+                        <a href="/complete/{{ task['id'] }}" class="btn btn-sm btn-success btn-custom me-1">✔</a>
+                        <a href="/edit/{{ task['id'] }}" class="btn btn-sm btn-warning btn-custom me-1">✏️</a>
+                        <a href="/delete/{{ task['id'] }}" class="btn btn-sm btn-danger btn-custom">❌</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <p class="text-muted text-center">No tasks yet. Add one above!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
